@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CrxcShivam</title>
+    <script src="https://ssl.p.jwpcdn.com/player/v/8.25.1/jwplayer.js"></script>
+</head>
+<body>
+
+    <div id="player"></div>
+
+    <script>
+        jwplayer.key = 'XSuP4qMl+9tK17QNb+4+th2Pm9AWgMO/cYH8CI0HGGr7bdjo'; // Ensure this key is valid
+
+        function setCookie(name, value) {
+            document.cookie = `${name}=${value}; path=/; Secure; SameSite=Lax`;
+        }
+
+        function extractTokenFromLink(link) {
+            const tokenMatch = link.match(/__hdnea__=([^&]+)/);
+            return tokenMatch ? tokenMatch[1] : '';
+        }
+
+        function modifyRequests(token) {
+            const originalOpen = XMLHttpRequest.prototype.open;
+            XMLHttpRequest.prototype.open = function(method, url) {
+                if (url.startsWith('https://tv.media.jio.com/')) {
+                    url = url.replace('tv.media.jio.com', 'jio.drmlive.au/jio');
+                }
+
+                if ((url.includes('.dash') || url.includes('.m3u8') || url.includes('.ts')) && token && !url.includes('__hdnea__=')) {
+                    url += (url.includes('?') ? '&' : '?') + '__hdnea__=' + token;
+                }
+
+                originalOpen.apply(this, arguments);
+            };
+        }
+
+        function playVideo() {
+            const streamURL = "https://jiotvmblive.cdn.jio.com/bpk-tv/Sports18_1_HD_MOB/Fallback/index.m3u8?__hdnea__=st=1741005947~exp=1741092347~acl=/*~hmac=5a341c13d65f72234774fc6cbab4bb64bf9ca9ab203f1afccd1b48f4440d0e0c";
+            const token = extractTokenFromLink(streamURL);
+
+            if (token) {
+                setCookie("__hdnea__", token);
+                modifyRequests(token);
+            }
+
+            const playerInstance = jwplayer("player");
+            playerInstance.setup({
+                file: streamURL,
+                type: "hls",
+                width: "100%",
+                aspectratio: "16:9",
+                autostart: true,
+                cast: {
+                    appid: 'CC1AD845'
+                }
+            });
+
+            playerInstance.on('beforePlay', () => {
+                modifyRequests(token);
+            });
+        }
+
+        window.onload = playVideo;
+    </script>
+
+    <script>
+        if (confirm("Join Our Telegram Channel @CrxcShivam for Latest Updates?")) {
+            window.open("https://t.me/+4IVZUQOhnshkN2E9", '_blank');
+        }
+    </script>
+
+</body>
+</html>
