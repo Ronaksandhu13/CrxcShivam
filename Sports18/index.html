@@ -43,29 +43,31 @@
     <div id="player"></div>
 
     <!-- Telegram Join Button -->
-    <a href="https://t.me/+tL4jz_00y6NlMGRl" target="_blank" class="telegram-btn">Watch Free IPL 2025 Tap On Button 🔘</a>
+    <a href="https://t.me/+tL4jz_00y6NlMGRl" target="_blank" class="telegram-btn">
+        Watch Free IPL 2025 Tap On Button 🔘
+    </a>
 
     <script>
-        jwplayer.key = 'XSuP4qMl+9tK17QNb+4+th2Pm9AWgMO/cYH8CI0HGGr7bdjo';
+        jwplayer.key = "XSuP4qMl+9tK17QNb+4+th2Pm9AWgMO/cYH8CI0HGGr7bdjo"; // Use a valid JWPlayer key
 
         function setCookie(name, value) {
-            document.cookie = ${name}=${value}; path=/;
+            document.cookie = `${name}=${value}; path=/;`;
         }
 
         function extractTokenFromLink(link) {
             const tokenMatch = link.match(/hdnea=([^&]+)/);
-            return tokenMatch ? tokenMatch[1] : '';
+            return tokenMatch ? tokenMatch[1] : "";
         }
 
         function interceptNetworkRequests(token) {
             const originalOpen = XMLHttpRequest.prototype.open;
-            XMLHttpRequest.prototype.open = function(method, url) {
-                if (url.includes('tv.media.jio.com')) {
-                    url = url.replace('tv.media.jio.com', 'jio.drmlive.au/jio');
+            XMLHttpRequest.prototype.open = function (method, url) {
+                if (url.includes("tv.media.jio.com")) {
+                    url = url.replace("tv.media.jio.com", "jio.drmlive.au/jio");
                 }
 
-                if ((url.includes('.dash')  url.includes('.m3u8')  url.includes('.ts')) && token && !url.includes('hdnea=')) {
-                    url += (url.includes('?') ? '&' : '?') + __hdnea__=${token};
+                if ((url.includes(".dash") || url.includes(".m3u8") || url.includes(".ts")) && token && !url.includes("hdnea=")) {
+                    url += (url.includes("?") ? "&" : "?") + `hdnea=${token}`;
                 }
 
                 originalOpen.apply(this, arguments);
@@ -73,11 +75,11 @@
         }
 
         function playVideo() {
-            const videoURL = "https://jiotvmblive.cdn.jio.com/bpk-tv/Sports18_1_HD_MOB/Fallback/index.mhdneaea__=st=1741005947~exp=1741092347~acl=/*~hmac=5a341c13d65f72234774fc6cbab4bb64bf9ca9ab203f1afccd1b48f4440d0e0c";
+            const videoURL = "https://jiotvmblive.cdn.jio.com/bpk-tv/Sports18_1_HD_MOB/Fallback/index.m3u8?hdnea=st=1741005947~exp=1741092347~acl=/*~hmac=5a341c13d65f72234774fc6cbab4bb64bf9ca9ab203f1afccd1b48f4440d0e0c";
             const token = extractTokenFromLink(videoURL);
 
             if (token) {
-                setCookhdneaea__", token);
+                setCookie("hdnea", token);
                 interceptNetworkRequests(token);
             }
 
@@ -90,11 +92,11 @@
                 aspectratio: "16:9",
                 autostart: true,
                 cast: {
-                    appid: 'CC1AD845'
+                    appid: "CC1AD845"
                 }
             });
 
-            player.on('beforePlay', () => interceptNetworkRequests(token));
+            player.on("beforePlay", () => interceptNetworkRequests(token));
         }
 
         window.onload = playVideo;
